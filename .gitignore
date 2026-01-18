@@ -1,5 +1,19 @@
+# Virtual environment
 myvenv/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# Django
 db.sqlite3
 .env
+
+# Media files (user uploads)
+media/
+
+# Images (extra safety)
+*.jpg
+*.jpeg
+*.png
+

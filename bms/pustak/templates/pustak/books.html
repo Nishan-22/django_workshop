@@ -60,7 +60,10 @@
                         <span class="text-muted">No Image</span>
                     {% endif %}
                 </td>
-               
+               <td>
+                <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm mt-1">Delete</a>
+                <a href="{% url 'update_book' book.id %}" class="btn btn-success btn-sm mt-1">Update</a>
+               </td>
            
                
             </tr>

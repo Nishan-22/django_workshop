@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Book 
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 def books(request):
     # return HttpResponse("Welcome to django")
@@ -38,8 +39,10 @@ def update_book(request, id):
     context = {'book':queryset}
     return render(request, 'pustak/updatebooks.html',context)
 
-def login_page(request):
-    return render(request, 'pustak/login.html')
+
+
+
+
 
 def register_page(request):
     if request.method == "POST":
@@ -62,7 +65,20 @@ def register_page(request):
     return render(request, 'pustak/register.html')
     
 
-    
+def login_page(request):
+    if request.method == "POST":
+        un = request.POST.get('username')
+        pw = request.POST.get('password')
+        # Add login logic here
+        user = authenticate(username=un, password=pw)
+        if user is not None:
+           messages.error(request, 'Login Failed! Please check your username and password')
+           return redirect('/login/')        
+        else:
+            login(request, user)
+    return render(request, 'pustak/login.html')
 
 def logout_page(request):
-    pass
+    if request.method == "POST":
+        logout(request)
+        return redirect('/login/')

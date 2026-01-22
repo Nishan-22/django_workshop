@@ -4,6 +4,8 @@ from .models import Book
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 def books(request):
     # return HttpResponse("Welcome to django")
@@ -49,20 +51,27 @@ def register_page(request):
         fn = request.POST.get('first_name')
         ln = request.POST.get('last_name')
         un = request.POST.get('username')
+        em = request.POST.get('email')
         pw = request.POST.get('password')
-        if not fn or not ln or not un or not pw:
-            messages.error(request, 'All fields are required.')
-            return render(request, 'pustak/register.html')
-        
-        if User.objects.filter(username=un).exists():
-            messages.error(request, 'Username already exists.')
-            return render(request, 'pustak/register.html')
-
-        User.objects.create_user(first_name=fn,last_name=ln,username=un,password=pw)
-        messages.success(request, 'Registration successful!')
+        if not fn or not ln or not un or not em or not pw:
+            messages.error(request,"All fields are required")
+            return redirect('/register/')
+        if User.objects.filter(username = un).exists():
+            messages.error(request,"Username already exists")
+            return redirect('/register/')
+        User.objects.create_user(first_name = fn , last_name = ln ,username=un ,email=em ,password=pw)
+        try:
+           subject = 'Welcome to BMS'
+           message = f'Hello {fn} {ln} \n\n Thanks for registering \n  Your username is {un}'
+           email_from = settings.EMAIL_HOST_USER
+           recipient_list = [em,]
+           send_mail(subject,message,email_from,recipient_list,fail_silently=True)
+        except:
+            pass
+       
+        messages.success(request,"User created")
         return redirect('/login/')
-
-    return render(request, 'pustak/register.html')
+    return render(request,'pustak/register.html')
     
 
 def login_page(request):

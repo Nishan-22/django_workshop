@@ -78,10 +78,12 @@
 								{% if user.is_authenticated %}
 								<li class = "nav-item">
 									<form action = "{% url 'logout_page' %}" method = "post">
+										{% csrf_token %}
 										<button class="btn btn-danger ms-3" type = "submit">Logout</button>
+
 										
 									</form>
-								</li>>
+								</li>
 								{% else %}
 								<li class = "nav-item">
 									<a href = "{% url 'login_page' %}" class="btn btn-primary ms-3">Login</a>

@@ -3,6 +3,6 @@
 set -o errexit
 
 
-pip instrall -r requirements.txt
+pip install -r requirements.txt
 python manage.py migrate
 python manage.py collectstatic --noinput
